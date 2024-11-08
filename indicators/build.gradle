@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/Pulimet/Indicators-Library'
     gitUrl = 'https://github.com/Pulimet/Indicators-Library.git'
 
-    libraryVersion = '1.7'
+    libraryVersion = '1.8'
 
     developerId = 'pulimet'
     developerName = 'Alexey Korolev'
@@ -31,8 +31,6 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
 
     }
 
@@ -49,7 +47,3 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.2'
 }
-
-
-apply from: 'installv1.gradle'
-apply from: 'bintrayv1.gradle'

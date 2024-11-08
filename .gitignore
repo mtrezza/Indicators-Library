@@ -259,3 +259,5 @@ gradle-app.setting
 app/libs/
 app/src/main/res/color/
 videoplayer/libs/
+
+.idea/

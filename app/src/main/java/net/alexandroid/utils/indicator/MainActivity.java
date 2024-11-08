@@ -9,7 +9,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 
 import net.alexandroid.utils.indicators.IndicatorsView;
-import net.alexandroid.utils.mylog.MyLog;
 
 public class MainActivity extends AppCompatActivity implements PlaceholderFragment.CategoryFragmentInteractionListener {
 
@@ -33,12 +32,6 @@ public class MainActivity extends AppCompatActivity implements PlaceholderFragme
         mIndicatorsView.setViewPager(viewPager);
         mIndicatorsView.setSmoothTransition(true);
         mIndicatorsView.setIndicatorsClickChangePage(true);
-        mIndicatorsView.setIndicatorsClickListener(new IndicatorsView.OnIndicatorClickListener() {
-            @Override
-            public void onClick(int indicatorNumber) {
-                MyLog.d("Click on: " + indicatorNumber);
-            }
-        });
 
         //mIndicatorsView.setBackgroundColor();
 
