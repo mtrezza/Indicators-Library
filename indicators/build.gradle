@@ -1,47 +1,78 @@
-apply plugin: 'com.android.library'
-
-ext {
-    bintrayRepo = 'utils'
-    bintrayName = 'indicators'
-
-    publishedGroupId = 'net.alexandroid.utils'
-    libraryName = 'Indicators'
-    artifact = 'indicators'
-
-    libraryDescription = 'Indicators is custom view that indicates selected page'
-
-    siteUrl = 'https://github.com/Pulimet/Indicators-Library'
-    gitUrl = 'https://github.com/Pulimet/Indicators-Library.git'
-
-    libraryVersion = '1.8.1'
-
-    developerId = 'pulimet'
-    developerName = 'Alexey Korolev'
-    developerEmail = 'korolev2009@gmail.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
 }
 
-
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 29
-
+        targetSdkVersion 30
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
+
+    buildToolsVersion '34.0.0'
+
     namespace 'net.alexandroid.utils.indicators'
 
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            res.srcDirs = ['res']
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked"
+    }
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+publishing {
+    publications {
+        create('release', MavenPublication) {
+            groupId = 'com.github.mtrezza'
+            artifactId = 'indicators'
+            version = '1.8.2'
+
+            // Add the AAR file produced by the Android build
+            afterEvaluate {
+                artifact("$buildDir/outputs/aar/${project.name}-release.aar")
+            }
+
+            // Add the sources JAR
+            artifact(sourcesJar)
+        }
+    }
+
+    repositories {
+        maven {
+            // Use a dummy repository for local publication
+            url = uri("file:///Users/tmp/")
+        }
+    }
+}
+
+// Add an explicit dependency between publish and bundle tasks
+afterEvaluate {
+    tasks.named('publishReleasePublicationToMavenLocal').configure {
+        dependsOn tasks.named('bundleReleaseAar')
+    }
+}
+
+repositories {
+    mavenCentral()
+    google()
 }
 
 dependencies {

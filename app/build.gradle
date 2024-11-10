@@ -1,23 +1,11 @@
-plugins {
-    id 'maven-publish'
-}
-
-publishing {
-    publications {
-        // Create a publication for the release variant
-        release(MavenPublication) {
-        }
-    }
-}
-
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "net.alexandroid.utils.indicators"
         minSdkVersion 15
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -28,7 +16,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'net.alexandroid.utils.indicator'
+    namespace 'net.alexandroid.utils.indicators.app'
 }
 
 dependencies {
