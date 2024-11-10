@@ -1,1 +1,1 @@
-include ':app', ':indicators'
+include ':indicators', ':app'
