@@ -38,30 +38,35 @@ task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
+publishing {
+    publications {
+        create('release', MavenPublication) {
+            groupId = 'com.github.mtrezza'
+            artifactId = 'indicators'
+            version = '1.8.2'
+
+            // Add the AAR file produced by the Android build
+            afterEvaluate {
+                artifact("$buildDir/outputs/aar/${project.name}-release.aar")
+            }
+
+            // Add the sources JAR
+            artifact(sourcesJar)
+        }
+    }
+
+    repositories {
+        maven {
+            // Use a dummy repository for local publication
+            url = uri("file:///Users/tmp/")
+        }
+    }
+}
+
+// Add an explicit dependency between publish and bundle tasks
 afterEvaluate {
-    publishing {
-        publications {
-            create('release', MavenPublication) {
-                groupId = 'com.github.mtrezza'
-                artifactId = 'indicators'
-                version = '1.8.2'
-
-                // Add the AAR file produced by the Android build
-                afterEvaluate {
-                    artifact("$buildDir/outputs/aar/${project.name}-release.aar")
-                }
-
-                // Add the sources JAR
-                artifact(sourcesJar)
-            }
-        }
-
-        repositories {
-            maven {
-                // Use a dummy repository for local publication
-                url = uri("file:///Users/tmp/")
-            }
-        }
+    tasks.named('publishReleasePublicationToMavenLocal').configure {
+        dependsOn tasks.named('bundleReleaseAar')
     }
 }
 
