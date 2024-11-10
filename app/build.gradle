@@ -27,7 +27,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'net.alexandroid.utils.indicators'
+    namespace 'net.alexandroid.utils.indicators.app'
 }
 
 dependencies {

@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import net.alexandroid.utils.indicators.app.R;
+
 
 /**
  * A placeholder fragment containing a simple view.
