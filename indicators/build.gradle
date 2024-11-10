@@ -1,84 +1,79 @@
-buildscript {
-    repositories {
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
-        mavenCentral()
-        google()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
-    }
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
 }
 
-apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 30
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    buildToolsVersion '34.0.0'
+
+    namespace 'net.alexandroid.utils.indicators'
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            res.srcDirs = ['res']
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked"
+    }
+}
 
 task sourcesJar(type: Jar) {
     archiveClassifier.set('sources')
     from android.sourceSets.main.java.srcDirs
 }
 
-android {
-    compileSdkVersion 30
+publishing {
+    publications {
+        create('release', MavenPublication) {
+            groupId = 'com.github.mtrezza'
+            artifactId = 'indicators'
+            version = '1.8.2'
 
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            resources.srcDirs = ['src']
-            res.srcDirs = ['res']
-        }
-    }
-    defaultConfig {
-        targetSdkVersion 30
-        minSdkVersion 15
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
-    buildToolsVersion '34.0.0'
-
-    tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:unchecked"
-    }
-    namespace 'net.alexandroid.utils.indicators'
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            create('mavenJava', MavenPublication) {
-                groupId = 'com.github.mtrezza'
-                artifactId = 'indicators'
-                version = '1.8.2'
-
-                // Add the AAR file produced by the Android build
+            // Add the AAR file produced by the Android build
+            afterEvaluate {
                 artifact("$buildDir/outputs/aar/${project.name}-release.aar")
-
-                // Add the sources JAR
-                artifact(sourcesJar) {
-                    classifier = 'sources'
-                }
-
-                // Additional POM details can be added here if needed (licenses, developers, etc.)
             }
+
+            // Add the sources JAR
+            artifact(sourcesJar)
         }
+    }
 
-        repositories {
-            maven {
-                url = uri("file:///Users/tmp/")
-            }
+    repositories {
+        maven {
+            // Use a dummy repository for local publication
+            url = uri("file:///Users/tmp/")
         }
     }
 }
 
 repositories {
     mavenCentral()
+    google()
 }
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+}
+
+
 
 //
 //ext {
@@ -124,8 +119,3 @@ repositories {
 //    namespace 'net.alexandroid.utils.indicators'
 //
 //}
-
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-}
